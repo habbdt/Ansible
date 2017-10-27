@@ -1,0 +1,14 @@
+---
+- hosts: controller_grp
+  become: yes
+  connection: ssh
+
+  tasks:
+  -  name: Check start file
+     shell: cat /root/start.sh
+     register: start_check
+
+  - debug: msg="stdout={{ start_check }}"
+  - debug: msg="stderr={{ start_check }}"
+  - debug: msg="The start file is empty"
+    when: start_check.stdout == ""
