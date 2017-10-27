@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: yes
+  connection: ssh
+
+  tasks:
+  - name: Install apache server
+    yum:
+      name: httpd
+      state: latest
+
+  - name: Restart apache service
+    service:
+      name: httpd
+      state: started
+
+  - name: Create file if it doesn't exists
+    file:
+      state: touch
+      path: /var/www/html/index.html
+
+  - name: Inset File
+    lineinfile:
+      state: present
+      dest: /var/www/html/index.html
+      line: Hostname={{ ansible_hostname }}
