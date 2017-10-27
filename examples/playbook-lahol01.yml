@@ -1,0 +1,25 @@
+---
+- hosts: '{{ hosts_all }}'
+  connection: ssh
+  remote_user: root
+  gather_facts: yes
+
+  # define playbook variables
+  vars:
+    hosts_all: controller_grp
+
+  # Hands-on Lab: Plays and Playbooks 1
+  tasks:
+  - name: copy /opt/program1.sh
+    copy:
+      src: /opt/program1.sh
+      dest: /home/ansible
+      mode: 0755
+      owner: root
+      group: root
+
+  - name: execute the shell script
+    command: /home/ansible/program1.sh
+    register: shell_out
+  - debug: msg="stdout={{ shell_out }}"
+  - debug: msg="stderr={{ shell_out }}"
