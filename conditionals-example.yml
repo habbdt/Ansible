@@ -1,0 +1,20 @@
+---
+- hosts: '{{ hosts_all }}'
+  connection: ssh
+  remote_user: root
+  gather_facts: yes
+
+  vars:
+    hosts_all: controller_grp
+    create_file: false
+
+  tasks:
+  - name: Install apache httpd server
+    yum:
+      name: httpd
+      state: latest
+    when: ansible_os_family == "RedHat"
+    register: apache_status
+
+  - debug: msg="stdout={{ apache_status }}"
+  - debug: msg="stderr={{ apache_status }}"
