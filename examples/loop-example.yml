@@ -1,0 +1,30 @@
+---
+- hosts: '{{ hosts_grp }}'
+  connection: ssh
+  remote_user: root
+  gather_facts: yes
+
+  vars:
+    hosts_grp: controller_grp
+
+  tasks:
+  - name: multiple items "{{ items }}"
+    file:
+      state: touch
+      path: /root/{{ item }}
+    with_items:
+     - file_01
+     - file_02
+     - file_03
+
+  - name: Install software packages
+    yum:
+      name: "{{ item }}"
+      state: latest
+    register: software_package
+    with_items:
+      - httpd
+      - emacs
+  - debug: msg="stdout={{ software_package }}"
+  - debug: msg="stderr={{ software_package }}"
+
