@@ -1,0 +1,35 @@
+---
+- hosts: controller_grp
+  become: yes
+  connection: ssh
+  gather_facts: yes
+
+  tasks:
+  - name: Install apache server
+    yum:
+      name: httpd
+      state: latest
+    ignore_errors: yes
+    register: apache_install
+
+  - name: Restart apache service
+    service:
+      name: httpd
+      state: started
+    ignore_errors: yes
+    register: apache_status
+  - debug:
+      msg="stdout={{ apache_status }}"
+  - debug:
+      msg="stderr={{ apache_status }}"
+
+  - name: Create file if it doesn't exists
+    file:
+      state: touch
+      path: /var/www/html/index.html
+
+  - name: Inset File
+    lineinfile:
+      state: present
+      dest: /var/www/html/index.html
+      line: Hostname={{ ansible_hostname }}
