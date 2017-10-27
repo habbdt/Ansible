@@ -1,0 +1,26 @@
+---
+- hosts: '{{ host_groups }}'
+  connection: ssh
+  remote_user: root
+  gather_facts: '{{ gather }}'
+
+  # define playbook variable.
+  vars:
+    host_groups: controller_grp
+    gather: yes
+
+  # tasks:  playbook that uses debug to echo whether the /etc/motd file is empty.  If empty it should display "MOTD is EMPTY"  otherwise it should display the contents.
+  tasks:
+  - name:  playbook that uses debug to echo whether the /etc/motd file is empty.
+    shell: cat /etc/motd
+    register: file_content
+  - debug: msg="stdout={{ file_content }}"
+  - debug: msg="stderr={{ file_content }}"
+  - debug: msg="MOTD is EMPTY"
+    when: file_content.stdout == ""
+
+  - name:  playbook that installs httpd provided the operating system is RedHat.
+    yum:
+      name: httpd
+      state: latest
+    when: ansible_os_family == "RedHat"
