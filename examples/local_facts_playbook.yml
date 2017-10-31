@@ -1,0 +1,15 @@
+---
+- hosts: local
+  remote_user: root
+  connection: ssh
+
+  tasks:
+  - debug: msg="{{ ansible_local.preferences }}"
+
+
+# cat /etc/ansible/facts.d/preferences.fact
+# [localfacts]
+# first_facts=filesystems
+# second_facts=cpu_utilization
+# third_facts=memory
+
