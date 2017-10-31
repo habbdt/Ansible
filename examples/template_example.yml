@@ -1,0 +1,15 @@
+---
+- hosts: controller_grp
+  connection: ssh
+  remote_user: root
+
+
+  # define vars for the apache conf file
+  vars:
+    define_log_level: warn
+    log_file_location: "/var/log/messages"
+
+  # copy the apache configuration
+  tasks:
+  - name: copy template from ansible tower to client node
+    template: src=/code/cl-admin/ansible/templates/httpd.conf dest=/etc/httpd/conf/httpd.conf
