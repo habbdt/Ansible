@@ -1,0 +1,16 @@
+---
+- hosts: compute_grp
+  connection: ssh
+  remote_user: root
+
+  tasks:
+  - name : install apache server
+    shell: cat /hello
+    register: apache
+    ignore_errors: yes
+
+  - name: tocuh a file in the /home if not installed
+    file:
+      path: /root/touchme
+      state: touch
+    when: apache.rc == 0
